@@ -1,13 +1,38 @@
 from mcrcon import MCRcon
+import ssl
+import asyncio
+import websockets
 
-class Server():
-    def __init__(self, ip, pw):
+
+async def echo(websocket):
+    async for command in websocket:
+        await websocket.send(command)
+        SERVER_ADDRESS = ("80.219.60.64")
+        PASSWORD = "Password"
+
+        Server(SERVER_ADDRESS, PASSWORD, command)
+
+
+async def main():
+    async with websockets.serve(echo, "localhost", 8001):
+        await asyncio.Future()  # run forever
+
+
+class Server:
+    def __init__(self, ip, pw, command):
         self.rcon_ip = ip
         self.rcon_pw = pw
+        self.rcon_cd = command
+        self.rcon_pt = int(25571)
+        self.open()
 
     def open(self):
-        # create rcon connection and store in self.connection
-        self.connection = MCRcon(self.rcon_ip, self.rcon_pw).open()
+        with MCRcon(host=self.rcon_ip, port=self.rcon_pt, password=self.rcon_pw) as mcr:
+            mcr.connect()
+            resp = mcr.command(self.rcon_cd)
+            print(resp)
+            mcr.disconnect()
+
 
 if __name__ == '__main__':
-    Server("46.126.69.5", "password123")
+    asyncio.run(main())
