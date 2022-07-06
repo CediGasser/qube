@@ -7,9 +7,13 @@
     
     let current_line: string = ""
 
+    $: if (lines) {
+
+    }
+
     const dispatch = createEventDispatcher();
 
-    function handleNewCommand(event: { key: string; }) {
+    function handleNewCommand(event: CustomEvent<any>): void {
         if (event.key !== 'Enter') return
 
         dispatch('command', {
@@ -17,27 +21,24 @@
         })
         current_line = ''
     }
+
+    function scrollIntoView(node: HTMLElement) {
+        node.scrollIntoView({ behavior: "smooth"})
+    }
 </script>
 
 <Paper>
     <div class="prompts">
         {#each lines as line}
-            <p>{line}</p>
+            <p use:scrollIntoView>{line}</p>
         {/each}
     </div>
     <TextInput bind:value={current_line} on:keydown={handleNewCommand} placeholder="Enter your command here"/>
 </Paper>
 
 <style>
-    #terminal {
-        max-width: 800px;
-    }
-
     .prompts {
-        min-height: 16rem;
-    }
-
-    .wraper {
-
+        height: 16rem;
+        overflow-y: scroll;
     }
 </style>
