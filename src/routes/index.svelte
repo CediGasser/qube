@@ -1,32 +1,22 @@
 <script lang="ts">
-    import type { Terminal } from 'xterm'
-    import console from '../lib/xterm'
-    import 'xterm/css/xterm.css'
+    import Terminal from '$lib/components/Terminal.svelte';
+    import { Button } from '@svelteuidev/core';
     import RconConnection from '../lib/RconConnection'
-import { Button } from '@svelteuidev/core';
 
-    let terminal: Terminal
-    let rcon: RconConnection
     let url: URL
     let password: string
-    let current_line = ""
+    let rcon: RconConnection
+    let lines: string[] = []
 
-    async function setupRcon() {
+    async function setupConnection() {
         rcon = new RconConnection(url, password)
+        lines = [...lines, 'Connection established...']
+    }
 
-        let { Terminal } = await import('xterm')
-        terminal = new Terminal({
-            cursorBlink: true
-        })
-
-        terminal.onKey((event, a) => {
-            current_line += event.key
-            terminal.write(event.key)
-        })
-
-        terminal.onLineFeed((a, b) => {
-            rcon.send(current_line)
-        })
+    function handleNewCommand(event: CustomEvent<any>): void {
+        rcon.send(event.detail.command)
+        console.log(lines)
+        lines = [...lines, event.detail.command ]
     }
 </script>
 
@@ -34,14 +24,6 @@ import { Button } from '@svelteuidev/core';
 
 <input type="text" bind:value={url}/>
 <input type="password" bind:value={password}/>
-<Button on:click={setupRcon}>Login</Button>
+<Button on:click={setupConnection}>Connect</Button>
 
-{#if terminal}
-    <div id="terminal" use:console={terminal} />
-{/if}
-
-<style>
-    #terminal {
-        max-width: 800px;
-    }
-</style>
+<Terminal enabled={Boolean(rcon)} on:command={handleNewCommand} {lines}/>
