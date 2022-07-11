@@ -7,20 +7,15 @@ export default class RconConnection {
     constructor(url: URL, password: string) {
         this.url = url
         this.password = password
-
-        this.open()
     }
 
-    public addEventListener(type: string, callback: function): void {
-        
+    public addEventListener(type: string, callback: (arg: any) => void): void {
+        this.socket.addEventListener(type, callback);
     }
-
-    public onMessage: (message: string) => void = (msg) => console.log(msg)
 
     public open() {
         let connectionString = `ws://${this.url}/${this.password}`
         this.socket = new WebSocket(connectionString)
-        this.socket.onmessage = (ev) => this.onMessage(ev.data)
     }
 
     public close() {

@@ -10,13 +10,13 @@
 
     async function setupConnection() {
         rcon = new RconConnection(url, password)
-        lines = [...lines, 'Connection established...']
+        rcon.addEventListener('open', () => lines = [...lines, "Connection established"])
+        rcon.open()
     }
 
     function handleNewCommand(event: CustomEvent<any>): void {
-        rcon.send(event.detail.command)
-        console.log(lines)
         lines = [...lines, event.detail.command ]
+        rcon.send(event.detail.command)
     }
 </script>
 
