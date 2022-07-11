@@ -5,12 +5,15 @@ import websockets
 
 
 async def echo(websocket):
-    async for command in websocket:
-        await websocket.send(command)
-        SERVER_ADDRESS = ("80.219.60.64")
-        PASSWORD = "Password"
+    SERVER_ADDRESS = ("80.219.60.64")
+    PASSWORD = "Password"
+    PORT = int(25571)
 
-        Server(SERVER_ADDRESS, PASSWORD, command)
+    rconConnection = Server(SERVER_ADDRESS, PORT, PASSWORD)
+    rconConnection.open()
+    async for command in websocket:
+        res = rconConnection.send(command)
+        await websocket.send(res)
 
 
 async def main():
@@ -19,19 +22,21 @@ async def main():
 
 
 class Server:
-    def __init__(self, ip, pw, command):
+    def __init__(self, ip, port, pw):
         self.rcon_ip = ip
+        self.rcon_pt = port
         self.rcon_pw = pw
-        self.rcon_cd = command
-        self.rcon_pt = int(25571)
         self.open()
 
     def open(self):
-        with MCRcon(host=self.rcon_ip, port=self.rcon_pt, password=self.rcon_pw) as mcr:
-            mcr.connect()
-            resp = mcr.command(self.rcon_cd)
-            print(resp)
-            mcr.disconnect()
+        self.rcon = MCRcon(host=self.rcon_ip, port=self.rcon_pt, password=self.rcon_pw)
+        self.rcon.connect()
+    
+    def send(self, command):
+        return self.rcon.command(command)
+
+    def disconnect(self):
+        self.rcon.disconnect()
 
 
 if __name__ == '__main__':
