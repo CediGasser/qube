@@ -7,11 +7,20 @@
     let password: string
     let rcon: RconConnection
     let lines: string[] = []
+    let enabled = false
 
     async function setupConnection() {
         rcon = new RconConnection(url, password)
-        rcon.addEventListener('open', () => lines = [...lines, "Connection established"])
         rcon.open()
+        rcon.onopen = () => {
+            lines = [...lines, "Connection established"]
+            enabled = true
+        }
+        rcon.onmessage = (event) => { lines = [...lines, event.data] }
+        rcon.onclose = (event) => { 
+            lines = [...lines, 'Connection closed: ' + event.reason]
+            enabled = false 
+        }
     }
 
     function handleNewCommand(event: CustomEvent<any>): void {
@@ -26,4 +35,4 @@
 <input type="password" bind:value={password}/>
 <Button on:click={setupConnection}>Connect</Button>
 
-<Terminal enabled={Boolean(rcon)} on:command={handleNewCommand} {lines}/>
+<Terminal {enabled} on:command={handleNewCommand} {lines}/>

@@ -9,10 +9,30 @@ export default class RconConnection {
         this.password = password
     }
 
-    public addEventListener(type: string, callback: (arg: any) => void): void {
-        this.socket.addEventListener(type, callback);
+    public set onmessage(value: ((this: WebSocket, ev: MessageEvent<any>) => any) | null) {
+        if (this.socket) {
+            this.socket.onmessage = value
+        }
+    }
+    
+    public set onopen(value: ((this: WebSocket, ev: Event) => any) | null) {
+        if (this.socket) {
+            this.socket.onopen = value
+        }
     }
 
+    public set onclose(value: ((this: WebSocket, ev: CloseEvent) => any) | null) {
+        if (this.socket) {
+            this.socket.onclose = value
+        }
+    }
+
+    public set onerror(value: ((this: WebSocket, ev: Event) => any) | null) {
+        if (this.socket) {
+            this.socket.onerror = value
+        }
+    }
+    
     public open() {
         let connectionString = `ws://${this.url}/${this.password}`
         this.socket = new WebSocket(connectionString)
@@ -23,7 +43,6 @@ export default class RconConnection {
     }
 
     public send(command: string) {
-        console.log(command)
         this.socket.send(command)
     }
 }

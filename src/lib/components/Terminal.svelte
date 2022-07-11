@@ -7,13 +7,9 @@
     
     let current_line: string = ""
 
-    $: if (lines) {
-
-    }
-
     const dispatch = createEventDispatcher();
 
-    function handleNewCommand(event: CustomEvent<any>): void {
+    function handleNewCommand(event: KeyboardEvent): void {
         if (event.key !== 'Enter') return
 
         dispatch('command', {
