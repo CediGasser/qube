@@ -1,40 +1,52 @@
 <script lang="ts">
-    import { TextInput, Paper } from "@svelteuidev/core"
-    import { createEventDispatcher } from "svelte";
+	import { TextInput, Paper, Overlay } from '@svelteuidev/core';
+	import { createEventDispatcher } from 'svelte';
 
-    export let enabled: boolean = true
-    export let lines: string[] = []
-    
-    let current_line: string = ""
+	export let enabled: boolean = false;
+	export let lines: string[] = [];
 
-    const dispatch = createEventDispatcher();
+	let current_line: string = '';
 
-    function handleNewCommand(event: KeyboardEvent): void {
-        if (event.key !== 'Enter') return
+	const dispatch = createEventDispatcher();
 
-        dispatch('command', {
-            command: current_line
-        })
-        current_line = ''
-    }
+	function handleNewCommand(event: CustomEvent<KeyboardEvent>): void {
+		if (event.key !== 'Enter') return;
 
-    function scrollIntoView(node: HTMLElement) {
-        node.scrollIntoView({ behavior: "smooth"})
-    }
+		dispatch('command', {
+			command: current_line
+		});
+		current_line = '';
+	}
+
+	function scrollIntoView(node: HTMLElement) {
+		node.scrollIntoView({ behavior: 'smooth' });
+	}
 </script>
 
 <Paper>
-    <div class="prompts">
-        {#each lines as line}
-            <p use:scrollIntoView>{line}</p>
-        {/each}
-    </div>
-    <TextInput bind:value={current_line} on:keydown={handleNewCommand} placeholder="Enter your command here"/>
+	<div class="prompts" class:enabled>
+		{#each lines as line}
+			<p use:scrollIntoView>{line}</p>
+		{/each}
+	</div>
+	<TextInput
+		bind:value={current_line}
+		on:keydown={handleNewCommand}
+		placeholder="Enter your command here"
+	>
+		{#if !enabled}
+			<Overlay opacity={0.6} color="#000" zIndex={5} />
+		{/if}
+	</TextInput>
 </Paper>
 
 <style>
-    .prompts {
-        height: 16rem;
-        overflow-y: scroll;
-    }
+	.prompts {
+		height: 16rem;
+		overflow-y: scroll;
+	}
+
+	.enabled {
+		background-color: aqua;
+	}
 </style>
