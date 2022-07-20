@@ -5,7 +5,7 @@ import websockets
 
 
 async def echo(websocket):
-    SERVER_ADDRESS = ("80.219.60.64")
+    SERVER_ADDRESS = "80.219.60.64"
     PASSWORD = "Password"
     PORT = int(25571)
 

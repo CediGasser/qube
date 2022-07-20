@@ -31,7 +31,7 @@
 	</div>
 	<TextInput
 		bind:value={current_line}
-		on:keydown={handleNewCommand}
+		on:keyup={handleNewCommand}
 		placeholder="Enter your command here"
 	>
 		{#if !enabled}

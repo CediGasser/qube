@@ -18,7 +18,7 @@
 			lines = [...lines, event.data];
 		};
 		rcon.onclose = (event) => {
-			lines = [...lines, 'Connection closed: ' + event.reason];
+			lines = [...lines, 'Connection closed: ' + event.code + ' ' + event.reason];
 		};
 	}
 
