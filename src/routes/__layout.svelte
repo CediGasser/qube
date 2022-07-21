@@ -4,8 +4,8 @@
 </script>
 
 <SvelteUIProvider withGlobalStyles withNormalizeCSS ssr>
-	<Header height={60} override={{ p: '$mdPX' }}>
-		<Group spacing="xs" position="center">
+	<Header override={{ p: '$mdPX' }}>
+		<Group spacing="xs" position="center" override="">
 			<Button href="/" variant={$page.url.pathname === '/' ? 'light' : 'subtle'}
 				>RCON Console</Button
 			>
