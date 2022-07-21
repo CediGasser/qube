@@ -4,10 +4,15 @@ import asyncio
 import websockets
 
 
-async def echo(websocket):
-    SERVER_ADDRESS = "80.219.60.64"
-    PASSWORD = "Password"
-    PORT = int(25571)
+async def handler(websocket):
+    split = websocket.path.split('/')
+
+    [SERVER_ADDRESS, PORT] = split[1].split(':')
+    PASSWORD = split[2]
+
+    PORT = int(PORT)
+
+    print(f"Connecting to {SERVER_ADDRESS}:{PORT} ...")
 
     rconConnection = Server(SERVER_ADDRESS, PORT, PASSWORD)
     rconConnection.open()
@@ -17,7 +22,7 @@ async def echo(websocket):
 
 
 async def main():
-    async with websockets.serve(echo, "0.0.0.0", 8765):
+    async with websockets.serve(handler, "0.0.0.0", 8765):
         await asyncio.Future()  # run forever
 
 
