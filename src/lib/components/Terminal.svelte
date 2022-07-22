@@ -2,10 +2,10 @@
 	import { TextInput, Paper, Overlay } from '@svelteuidev/core';
 	import { createEventDispatcher } from 'svelte';
 
-	export let enabled: boolean = false;
+	export let enabled = false;
 	export let lines: string[] = [];
 
-	let current_line: string = '';
+	let current_line = '';
 
 	const dispatch = createEventDispatcher();
 

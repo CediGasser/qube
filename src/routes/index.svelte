@@ -7,9 +7,10 @@
 	let password: string;
 	let rcon: RconConnection;
 	let lines: string[] = [];
+	export let rcon_proxy_server: string
 
 	async function setupConnection(): Promise<void> {
-		rcon = new RconConnection(url, password);
+		rcon = new RconConnection(url, password, rcon_proxy_server);
 		rcon.open();
 		rcon.onopen = () => {
 			lines = [...lines, 'Connection established'];
@@ -22,7 +23,7 @@
 		};
 	}
 
-	function handleNewCommand(event: CustomEvent<{command: string}>): void {
+	function handleNewCommand(event: CustomEvent<{ command: string }>): void {
 		lines = [...lines, event.detail.command];
 		rcon.send(event.detail.command);
 	}

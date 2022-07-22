@@ -1,14 +1,14 @@
 export default class RconConnection {
 	private url: URL;
 	private password: string;
-	private PROXY_SERVER: string
+	private PROXY_SERVER: string;
 
 	private socket!: WebSocket;
 
-	constructor(url: URL, password: string) {
+	constructor(url: URL, password: string, proxy: string) {
 		this.url = url;
 		this.password = password;
-		this.PROXY_SERVER = 'ws://localhost:8765'
+		this.PROXY_SERVER = proxy ?? 'ws://localhost:8765';
 	}
 
 	public set onmessage(value: ((this: WebSocket, ev: MessageEvent<any>) => any) | null) {
