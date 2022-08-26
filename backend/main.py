@@ -2,7 +2,7 @@ from mcrcon import MCRcon
 import ssl
 import asyncio
 import websockets
-
+import os
 
 async def handler(websocket):
     split = websocket.path.split('/')
@@ -14,34 +14,34 @@ async def handler(websocket):
 
     print(f"Connecting to {SERVER_ADDRESS}:{PORT} ...")
 
-    rconConnection = Server(SERVER_ADDRESS, PORT, PASSWORD)
-    rconConnection.open()
+    rconCon = MCRcon(host=SERVER_ADDRESS, port=PORT, password=PASSWORD)
+    rconCon.connect()
+
     async for command in websocket:
-        res = rconConnection.send(command)
+        res = rconCon.command(command)
         await websocket.send(res)
 
 
 async def main():
-    async with websockets.serve(handler, "0.0.0.0", 8765):
-        await asyncio.Future()  # run forever
+    try:
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 
+        letsencrypt_host = os.environ.get("LETSENCRYPT_HOST")
 
-class Server:
-    def __init__(self, ip, port, pw):
-        self.rcon_ip = ip
-        self.rcon_pt = port
-        self.rcon_pw = pw
-        self.open()
+        # Cert files will be accessed in mounted docker volume, might change this path to an env var in the future
+        ssl_cert = f"/app/certs/{letsencrypt_host}/fullchain.pem"
+        ssl_key = f"/app/certs/{letsencrypt_host}/key.pem"
 
-    def open(self):
-        self.rcon = MCRcon(host=self.rcon_ip, port=self.rcon_pt, password=self.rcon_pw)
-        self.rcon.connect()
-    
-    def send(self, command):
-        return self.rcon.command(command)
+        ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
-    def disconnect(self):
-        self.rcon.disconnect()
+        async with websockets.serve(handler, "0.0.0.0", 8765, ssl=ssl_context):
+            await asyncio.Future()  # run forever
+
+    except:
+        print("Could not find ssl certs, starting unsafe")
+
+        async with websockets.serve(handler, "0.0.0.0", 8765):
+            await asyncio.Future()  # run forever
 
 
 if __name__ == '__main__':
