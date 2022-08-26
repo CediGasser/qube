@@ -34,12 +34,13 @@ async def main():
 
         ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
+        print(f"Loaded cert chain from /app/certs/{letsencrypt_host}/, using TLS encryption.")
+
         async with websockets.serve(handler, "0.0.0.0", 8765, ssl=ssl_context):
             await asyncio.Future()  # run forever
 
     except:
-        print("Could not find ssl certs, starting unsafe")
-
+        print("Could not load cert chain, using no encryption.")
         async with websockets.serve(handler, "0.0.0.0", 8765):
             await asyncio.Future()  # run forever
 
