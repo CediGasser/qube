@@ -6,4 +6,4 @@ COPY ./backend/requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 COPY ./backend .
 EXPOSE 8765
-CMD [ "python3", "main.py"]
+CMD [ "python3", "-u", "main.py"]
