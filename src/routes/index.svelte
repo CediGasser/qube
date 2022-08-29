@@ -21,6 +21,9 @@
 		rcon.onclose = (event) => {
 			lines = [...lines, 'Connection closed: ' + event.code + ' ' + event.reason];
 		};
+		rcon.onerror = (event) => {
+			console.log(event);
+		}
 	}
 
 	function handleNewCommand(event: CustomEvent<{ command: string }>): void {
