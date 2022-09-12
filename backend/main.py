@@ -23,7 +23,7 @@ async def handler(websocket):
 
 
 async def main():
-    socket_port = 443
+    socket_port = 8765
     socket_host = "0.0.0.0"
 
 
