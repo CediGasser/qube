@@ -1,16 +1,19 @@
 <script lang="ts">
+	throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
 	import Terminal from '$lib/components/Terminal.svelte';
 	import { Button } from '@svelteuidev/core';
 	import RconConnection from '../lib/RconConnection';
+	import type data from './$types';
+	
+	export let data: data
 
 	let url: URL;
 	let password: string;
 	let rcon: RconConnection;
 	let lines: string[] = [];
-	export let rcon_proxy_server: string
 
 	async function setupConnection(): Promise<void> {
-		rcon = new RconConnection(url, password, rcon_proxy_server);
+		rcon = new RconConnection(url, password, data.rcon_proxy_server);
 		rcon.open();
 		rcon.onopen = () => {
 			lines = [...lines, 'Connection established'];
