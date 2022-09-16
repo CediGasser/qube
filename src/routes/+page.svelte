@@ -1,36 +1,19 @@
 <script lang="ts">
-	throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
 	import Terminal from '$lib/components/Terminal.svelte';
 	import { Button } from '@svelteuidev/core';
-	import RconConnection from '../lib/RconConnection';
-	import type data from './$types';
+	import type { PageData } from './$types';
+	import { rcon } from '$lib/Rcon';
 	
-	export let data: data
+	export let data: PageData
 
 	let url: URL;
 	let password: string;
-	let rcon: RconConnection;
-	let lines: string[] = [];
 
 	async function setupConnection(): Promise<void> {
-		rcon = new RconConnection(url, password, data.rcon_proxy_server);
-		rcon.open();
-		rcon.onopen = () => {
-			lines = [...lines, 'Connection established'];
-		};
-		rcon.onmessage = (event) => {
-			lines = [...lines, event.data];
-		};
-		rcon.onclose = (event) => {
-			lines = [...lines, 'Connection closed: ' + event.code + ' ' + event.reason];
-		};
-		rcon.onerror = (event) => {
-			console.log(event);
-		}
+		rcon.connect(url, password, new URL(data.rcon_proxy_server));
 	}
 
 	function handleNewCommand(event: CustomEvent<{ command: string }>): void {
-		lines = [...lines, event.detail.command];
 		rcon.send(event.detail.command);
 	}
 </script>
@@ -41,4 +24,4 @@
 <input type="password" bind:value={password} />
 <Button on:click={setupConnection}>Connect</Button>
 
-<Terminal on:command={handleNewCommand} {lines} />
+<Terminal on:command={handleNewCommand} lines={$rcon} />

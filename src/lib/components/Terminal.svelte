@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { TextInput, Paper, Overlay } from '@svelteuidev/core';
 	import { createEventDispatcher } from 'svelte';
+	import { scrollIntoView } from '$lib/Actions';
 
 	export let enabled = false;
 	export let lines: string[] = [];
@@ -9,17 +10,13 @@
 
 	const dispatch = createEventDispatcher();
 
-	function handleNewCommand(event: CustomEvent<KeyboardEvent>): void {
-		if (event.key !== 'Enter') return;
-
-		dispatch('command', {
-			command: current_line
-		});
-		current_line = '';
-	}
-
-	function scrollIntoView(node: HTMLElement) {
-		node.scrollIntoView({ behavior: 'smooth' });
+	// on Enter, dispatch event 'command'
+	function handleKeyDown(event: CustomEvent<KeyboardEvent>): void {
+		let keyEvent = event as unknown as KeyboardEvent
+		if (keyEvent.key === 'Enter') {
+			dispatch('command', { command: current_line });
+			current_line = '';
+		}
 	}
 </script>
 
@@ -31,7 +28,7 @@
 	</div>
 	<TextInput
 		bind:value={current_line}
-		on:keyup={handleNewCommand}
+		on:keyup={handleKeyDown}
 		placeholder="Enter your command here"
 	>
 		{#if !enabled}
