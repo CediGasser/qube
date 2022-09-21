@@ -21,13 +21,14 @@ class RconStore {
         this.proxyURL = null;
     }
 
-    public connect(serverURL: URL, password: string, proxyURL: URL) {
+    public connect(serverURL: URL | string, password: string, proxyURL: URL | string) {
         if (this.ws) {
             this.ws.close();
         }
-        this.serverURL = serverURL;
+        this.serverURL = serverURL instanceof URL ? serverURL : new URL(serverURL);
         this.password = password;
-        this.proxyURL = proxyURL ?? new URL('ws://localhost:8765');
+        proxyURL = proxyURL ?? new URL('ws://localhost:8765');
+        this.proxyURL = proxyURL instanceof URL ? proxyURL : new URL(proxyURL);
 
         this.ws = new WebSocket(`${this.proxyURL}${this.serverURL}/${this.password}`);
         this.ws.onopen = (): void => {
