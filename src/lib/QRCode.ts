@@ -1,4 +1,5 @@
 import qrcode from 'qrcode'
+import { browser } from '$app/environment';
 
 export class QRCode {
     private text: string;
@@ -7,8 +8,12 @@ export class QRCode {
         this.text = text
     }
 
-    getCanvas(){
-        const canvas = document.getElementById('canvas')
-        return qrcode.toCanvas(canvas, this.text)
+    async getCanvas(){
+        if (!browser) {
+            return null
+        }
+        const canvas = document.createElement('canvas')
+        await qrcode.toCanvas(canvas, this.text)
+        return canvas
     }
 }
