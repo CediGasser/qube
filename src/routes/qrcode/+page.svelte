@@ -1,6 +1,7 @@
 <script lang="ts">
     import { QRCode } from '$lib/QRCode'
     import { TextInput } from '@svelteuidev/core'
+	import { scale } from 'svelte/transition';
 
     let canvas: HTMLCanvasElement
     let text: string

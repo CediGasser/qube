@@ -3,7 +3,6 @@ import { browser } from '$app/environment';
 
 export class QRCode {
     private text: string;
-
     constructor(text: string){
         this.text = text
     }
@@ -13,7 +12,7 @@ export class QRCode {
             return null
         }
         const canvas = document.createElement('canvas')
-        await qrcode.toCanvas(canvas, this.text)
+        await qrcode.toCanvas(canvas, this.text, { scale: 1 })
         return canvas
     }
 }
