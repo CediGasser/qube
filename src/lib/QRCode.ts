@@ -2,7 +2,7 @@ import qrcode from 'qrcode'
 import { browser } from '$app/environment';
 
 export class QRCode {
-    async getCanvas(text: string): Promise<HTMLCanvasElement | null> {
+    static async getCanvas(text: string): Promise<HTMLCanvasElement | null> {
         if (!browser) {
             return null
         }

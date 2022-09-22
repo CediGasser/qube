@@ -1,10 +1,11 @@
 <script lang="ts">
     import { QRCode } from '$lib/QRCode'
     import { TextInput } from '@svelteuidev/core'
+	import { scale } from 'svelte/transition';
 
     let dataUrl: string
     let text: string
-    // text = document.getElementById('text') as unknown as string
+    
     $: updateImage(text)
 
     async function updateImage(newText: string) {
