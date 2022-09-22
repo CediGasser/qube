@@ -12,16 +12,16 @@
     $: if (dialog && !(dialog.open) && opened) {
         console.log('open modal')
         dialog.showModal();
+    } else if (dialog && dialog.open && !opened) {
+        console.log('close modal')
+        dialog.close();
     }
 
-    const closeModal = () => {
-        opened = false;
-        dialog.close();
-        dispatch('close');
+    const dispatchClickoutside = () => {
+        dispatch('clickoutside');
     }
 </script>
 
-<dialog use:clickoutside={{ enabled: !!(dialog?.open), callback: closeModal }} bind:this={dialog}>
+<dialog use:clickoutside={{ enabled: !!(dialog?.open), callback: dispatchClickoutside }} bind:this={dialog}>
     <slot />
-    <Button on:click={closeModal} />
 </dialog>

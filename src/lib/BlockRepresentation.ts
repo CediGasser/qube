@@ -1,7 +1,7 @@
 export class BlockRepresentation {
     private imageData: ImageData;
 
-    constructor(input: HTMLCanvasElement | HTMLImageElement | URL){
+    constructor(input: HTMLCanvasElement | HTMLImageElement | string){
         if (input instanceof HTMLCanvasElement) {
             this.imageData = this.dataFromCanvas(input)
         } else if (input instanceof HTMLImageElement) {
@@ -68,10 +68,7 @@ export class BlockRepresentation {
         return this.dataFromCanvas(canvas);
     }
 
-    dataFromImageUrl(url: URL | string): ImageData {
-        if (url instanceof URL) {
-            url = url.toString()
-        }
+    dataFromImageUrl(url: string): ImageData {
         const image = new Image();
         image.src = url;
         return this.dataFromImage(image);
@@ -86,9 +83,17 @@ export class BlockRepresentation {
             };
         })
     }
+
+    get width(): number {
+        return this.imageData.width;
+    }
+
+    get height(): number {
+        return this.imageData.height;
+    }
 }
 
-type Block = {
+export type Block = {
     id: string;
     x: number;
     y: number;

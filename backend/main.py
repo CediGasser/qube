@@ -1,3 +1,4 @@
+from json import JSONDecoder
 from mcrcon import MCRcon
 import ssl
 import asyncio
@@ -18,8 +19,17 @@ async def handler(websocket):
     rconCon.connect()
 
     async for command in websocket:
-        res = rconCon.command(command)
-        await websocket.send(res)
+        command = JSONDecoder().decode(command)
+        if (type(command) == str):
+            response = rconCon.command(command)
+            await websocket.send(response)
+        elif (type(command) == list):
+            responses = ''
+            for c in command:
+                response = rconCon.command(c)
+                responses += response + '\n'
+
+            await websocket.send(responses)
 
 
 async def main():

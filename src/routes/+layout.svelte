@@ -27,25 +27,22 @@
 <SvelteUIProvider {config} withGlobalStyles withNormalizeCSS ssr>
 	<Header override={{ p: '$mdPX' }} height=60>
 		<Group spacing="xs" position="center">
-			<Button href="/" variant={$page.url.pathname === '/' ? 'light' : 'subtle'}>
+			<a href="/"  class:active={$page.url.pathname === '/'}>
 				RCON Console
-			</Button>
-			<Button href="/qrcode" variant={$page.url.pathname === '/qrcode' ? 'light' : 'subtle'}>
+			</a>
+			<a href="/qrcode" class:active={$page.url.pathname === '/qrcode'}>
 				QR code builder
-			</Button>
-			<Button href="/itemshop" variant={$page.url.pathname === '/itemshop' ? 'light' : 'subtle'}>
+			</a>
+			<a href="/itemshop" class:active={$page.url.pathname === '/itemshop'}>
 				Item Shop
-			</Button>
+			</a>
 			<Button on:click={() => (opened = true)} variant="gradient">
 				Connect
 			</Button>
 		</Group>
 	</Header>
 	<div>
-		<Modal bind:opened={opened} on:close={setupConnection}>
-			<TextInput bind:value={serverURL}></TextInput>
-			<TextInput bind:value={password}></TextInput>
-		</Modal>
+
 	</div>
 	<main>
 		<slot />
@@ -55,5 +52,9 @@
 <style>
 	main {
 		margin: 16px;
+	}
+
+	.active {
+		color: rgb(0, 187, 255);
 	}
 </style>

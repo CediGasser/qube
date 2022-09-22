@@ -34,12 +34,14 @@ class RconStore {
         this.ws.onopen = (): void => {
             this.messages.update((messages) => {
                 messages = [...messages, `Connected to: ${this.serverURL?.toString()}`];
+                console.log('Connected')
                 return messages;
             });
         };
         this.ws.onclose = (event: CloseEvent): void => {
             this.messages.update((messages) => {
                 messages = [...messages, `Connection closed: ${event.reason}`];
+                console.log('closed')
                 return messages;
             });
             this.ws = null;
@@ -47,6 +49,7 @@ class RconStore {
         this.ws.onerror = (event: Event): void => {
             this.messages.update((messages) => {
                 messages = [...messages, `Connection error: ${event.type}`];
+                console.log('error')
                 return messages;
             });
             this.ws = null;
@@ -54,6 +57,7 @@ class RconStore {
         this.ws.onmessage = (event): void => {
             this.messages.update((messages) => {
                 messages = [...messages, event.data];
+                console.log(event.data)
                 return messages;
             });
         };
@@ -70,22 +74,19 @@ class RconStore {
         }
     }
 
-    public send(command: string): void {
+    public send(command: string | string[]): void {
         if (this.ws) {
-            this.ws.send(command);
+            const dataString = JSON.stringify(command)
+            this.ws.send(dataString);
             this.messages.update((messages) => {
-                messages = [...messages, command];
+                if (Array.isArray(command)) {
+                    messages = [...messages, ...command]
+                } else {
+                    messages = [...messages, command];
+                }
                 return messages;
             });
-        } // else { // try to reconnect, otherhiwse log error
-        //     if (this.serverURL && this.password && this.proxyURL) {
-        //         this.retried = true;
-        //         this.connect(this.serverURL, this.password, this.proxyURL);
-        //         this.send(command);
-        //     } else {
-        //         console.log('No connection to send command');
-        //     }
-        // }
+        }
     }
 }
 
