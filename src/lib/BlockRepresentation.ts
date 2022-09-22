@@ -46,13 +46,13 @@ export class BlockRepresentation {
     getBlockIdFromRGBA(r: number, g: number, b: number, a: number): string {
         const avg = (r + g + b) / 3;
         if (avg < 64) {
-            return 'minecraft:white_concrete';
-        } else if (avg < 128) {
-            return 'minecraft:light_gray_concrete';
-        } else if (avg < 192) {
-            return 'minecraft:gray_concrete';
-        } else {
             return 'minecraft:black_concrete';
+        } else if (avg < 128) {
+            return 'minecraft:gray_concrete';
+        } else if (avg < 192) {
+            return 'minecraft:light_gray_concrete';
+        } else {
+            return 'minecraft:white_concrete';
         }
     }
 
