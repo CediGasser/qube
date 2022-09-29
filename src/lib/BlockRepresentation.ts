@@ -13,10 +13,12 @@ export class BlockRepresentation {
 
     getBlockMatrix(): Block[][] {
         const matrix: Block[][] = [];
-        for (let y = 0; y < this.imageData.height; y++) {
+        for (let y = this.imageData.height - 1; y >= 0; y--) {
             const row: Block[] = [];
             for (let x = 0; x < this.imageData.width; x++) {
-                row.push(this.getBlockFromPixel(x, y));
+                const block = this.getBlockFromPixel(x, y)
+                block.y = this.imageData.height - 1 - y // flip y axis
+                row.push(block);
             }
             matrix.push(row);
         }
@@ -45,6 +47,9 @@ export class BlockRepresentation {
 
     getBlockIdFromRGBA(r: number, g: number, b: number, a: number): string {
         const avg = (r + g + b) / 3;
+        if (a === 0) {
+            return 'minecraft:air';
+        }
         if (avg < 64) {
             return 'minecraft:black_concrete';
         } else if (avg < 128) {
