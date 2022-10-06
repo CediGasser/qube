@@ -8,7 +8,6 @@
     let dataUrl: string
     let text: string
     let baseCoordinates = { x: -200, y: 80, z: -372 }
-    let inputIsQRCode = true;
 
     $: updateImage(text)
 
@@ -38,21 +37,10 @@
 
 <h1>QR Code Builder</h1>
 <Group>
-    <Button on:click={() => inputIsQRCode = !inputIsQRCode}>
-        {#if inputIsQRCode}
-            Text
-        {:else}
-            QR Code
-        {/if}
-    </Button>
-    {#if inputIsQRCode}
-        <TextInput bind:value={text}/>
-    {:else}
-        <ImageUploadInput bind:dataUrl={dataUrl}/>
-    {/if}
+    <ImageUploadInput bind:dataUrl={dataUrl}/>
 </Group>
 
-<img src={dataUrl} alt="Generated QR Code"/>
+<img src={dataUrl} alt="Your upload"/>
 <Button on:click={buildImage}>Build</Button>
 <Button on:click={clearBlocks}>Clear</Button>
 

@@ -1,12 +1,12 @@
 <script lang="ts">
     import { QRCode } from '$lib/QRCode'
-    import { TextInput, Button, Group } from '@svelteuidev/core'
+    import { Button, Group } from '@svelteuidev/core'
     import { BlockRepresentation } from '$lib/BlockRepresentation'
     import { rcon } from '$lib/Rcon'
-    import ImageUploadInput from '$lib/components/ImageUploadInput.svelte'
+    import TextInput from '$lib/components/TextInput.svelte'
 
     let dataUrl: string
-    let text: string
+    let text: string = ''
     let baseCoordinates = { x: -200, y: 80, z: -372 }
     let inputIsQRCode = true;
 
@@ -37,20 +37,7 @@
 </script>
 
 <h1>QR Code Builder</h1>
-<Group>
-    <Button on:click={() => inputIsQRCode = !inputIsQRCode}>
-        {#if inputIsQRCode}
-            Text
-        {:else}
-            QR Code
-        {/if}
-    </Button>
-    {#if inputIsQRCode}
-        <TextInput bind:value={text}/>
-    {:else}
-        <ImageUploadInput bind:dataUrl={dataUrl}/>
-    {/if}
-</Group>
+<TextInput bind:value={text} label="Text"/>
 
 <img src={dataUrl} alt="Generated QR Code"/>
 <Button on:click={buildImage}>Build</Button>

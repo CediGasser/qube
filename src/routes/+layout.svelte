@@ -28,13 +28,13 @@
 	<Header override={{ p: '$mdPX' }} height=60>
 		<Group spacing="xs" position="center">
 			<a href="/"  class:active={$page.url.pathname === '/'}>
-				RCON Console
+				QR Code Builder
 			</a>
-			<a href="/qrcode" class:active={$page.url.pathname === '/qrcode'}>
-				QR code builder
+			<a href="/terminal" class:active={$page.url.pathname === '/terminal'}>
+				Terminal
 			</a>
-			<a href="/itemshop" class:active={$page.url.pathname === '/itemshop'}>
-				Item Shop
+			<a href="/image" class:active={$page.url.pathname === '/image'}>
+				Image
 			</a>
 			<Button on:click={() => (opened = true)} variant="gradient">
 				Connect
@@ -54,7 +54,26 @@
 		margin: 16px;
 	}
 
+	a {
+		height: 36px;
+		text-decoration: none;
+		padding-right: 18px;
+		padding-left: 18px;
+		border-radius: 4px;
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		line-height: 1;
+		width: auto;
+	}
+	a:hover {
+		background-color: rgb(242, 242, 255);
+	}
+	a:active {
+		color: inherit; 
+	}
 	.active {
-		color: rgb(0, 187, 255);
+		background-color: rgb(230, 230, 255);
 	}
 </style>
