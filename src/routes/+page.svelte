@@ -1,6 +1,5 @@
 <script lang="ts">
     import { QRCode } from '$lib/QRCode'
-    import { Button, Group } from '@svelteuidev/core'
     import { BlockRepresentation } from '$lib/BlockRepresentation'
     import { rcon } from '$lib/Rcon'
     import TextInput from '$lib/components/TextInput.svelte'
@@ -40,8 +39,8 @@
 <TextInput bind:value={text} label="Text"/>
 
 <img src={dataUrl} alt="Generated QR Code"/>
-<Button on:click={buildImage}>Build</Button>
-<Button on:click={clearBlocks}>Clear</Button>
+<button on:click={buildImage}>Build</button>
+<button on:click={clearBlocks}>Clear</button>
 
 <style>
     img {

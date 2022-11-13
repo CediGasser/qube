@@ -1,6 +1,5 @@
 <script lang="ts">
     import { QRCode } from '$lib/QRCode'
-    import { TextInput, Button, Group } from '@svelteuidev/core'
     import { BlockRepresentation } from '$lib/BlockRepresentation'
     import { rcon } from '$lib/Rcon'
     import ImageUploadInput from '$lib/components/ImageUploadInput.svelte'
@@ -36,13 +35,13 @@
 </script>
 
 <h1>QR Code Builder</h1>
-<Group>
+<div>
     <ImageUploadInput bind:dataUrl={dataUrl}/>
-</Group>
+</div>
 
 <img src={dataUrl} alt="Your upload"/>
-<Button on:click={buildImage}>Build</Button>
-<Button on:click={clearBlocks}>Clear</Button>
+<button on:click={buildImage}>Build</button>
+<button on:click={clearBlocks}>Clear</button>
 
 <style>
     img {

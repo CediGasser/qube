@@ -1,7 +1,5 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { clickoutside } from '@svelteuidev/composables'
-	import { Button } from '@svelteuidev/core';
 
     const dispatch = createEventDispatcher();
     
@@ -20,8 +18,29 @@
     const dispatchClickoutside = () => {
         dispatch('clickoutside');
     }
+
+    // svelte action to detect click outside of element
+    function clickOutside(node: HTMLElement, settings: any) {
+        if (!settings.enabled) {
+            return;
+        }
+        const handleClick = (event: MouseEvent) => {
+            if (node.contains(event.target as Node)) {
+                return;
+            }
+            settings.callback();
+        };
+        
+        document.addEventListener('click', handleClick);
+
+        return {
+            destroy() {
+                document.removeEventListener('click', handleClick);
+            }
+        };
+    }
 </script>
 
-<dialog use:clickoutside={{ enabled: !!(dialog?.open), callback: dispatchClickoutside }} bind:this={dialog}>
+<dialog use:clickOutside={{ enabled: !!(dialog?.open), callback: dispatchClickoutside }} bind:this={dialog}>
     <slot />
 </dialog>

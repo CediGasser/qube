@@ -1,12 +1,13 @@
 <script lang="ts">
     export let label: string;
     export let value: string;
+	export let placeholder: string = '';
 </script>
 
 {#if label}
     <label for="input">{label}</label>
 {/if}
-<input bind:value id="input" type="text"/>
+<input placeholder={placeholder} bind:value id="input" type="text" on:keyup on:keydown on:keypress/>
 
 <style>
     label {
