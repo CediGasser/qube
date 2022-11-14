@@ -3,6 +3,8 @@
 	import { page } from '$app/stores';
 	import { rcon } from '$lib/Rcon';
 	import type { PageData } from './$types';
+	import '$lib/assets/css/reset.css';
+	import '$lib/assets/css/app.css';
 
 	export let data: PageData;
 
@@ -19,24 +21,28 @@
 </script>
 
 <header>
-	<div>
-		<a href="/"  class:active={$page.url.pathname === '/'}>
-			QR Code Builder
-		</a>
-		<a href="/terminal" class:active={$page.url.pathname === '/terminal'}>
-			Terminal
-		</a>
-		<a href="/image" class:active={$page.url.pathname === '/image'}>
-			Image
-		</a>
-		<button on:click={() => (opened = true)}>
-			Connect
-		</button>
-	</div>
+	<select>
+		<option>
+			<a href="/" class:active={$page.url.pathname === '/'}>
+				QR Code Builder
+			</a>
+		</option>
+		<option>
+			<a href="/terminal" class:active={$page.url.pathname === '/terminal'}>
+				Terminal
+			</a>
+		</option>
+		<option>
+			<a href="/image" class:active={$page.url.pathname === '/image'}>
+				Image
+			</a>
+		</option>
+	</select>
+	<button on:click={() => (opened = true)}>
+		Connect
+	</button>
 </header>
-<div>
 
-</div>
 <main>
 	<slot />
 </main>
@@ -46,7 +52,7 @@
 		margin: 16px;
 	}
 
-	a {
+	header a {
 		height: 36px;
 		text-decoration: none;
 		padding-right: 18px;
@@ -59,10 +65,10 @@
 		line-height: 1;
 		width: auto;
 	}
-	a:hover {
+	header a:hover {
 		background-color: rgb(242, 242, 255);
 	}
-	a:active {
+	header a:active {
 		color: inherit; 
 	}
 	.active {

@@ -1,0 +1,11 @@
+:root {
+    --c-primary: #00522E;
+    --c-secondary: #372E1D;
+    --c-tertiary: #CE9F69;
+    --c-background: #FAFAFA;
+}
+
+body {
+    background-color: var(--c-background);
+    font-family: 'Roboto', sans-serif;
+}
