@@ -40,7 +40,7 @@ async def main():
     try:
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 
-        letsencrypt_host = os.environ.get("LETSENCRYPT_HOST")
+        letsencrypt_host = os.environ.get("CERT_NAME")
 
         # Cert files will be accessed in mounted docker volume, might change this path to an env var in the future
         ssl_cert = f"/app/certs/{letsencrypt_host}/fullchain.pem"
