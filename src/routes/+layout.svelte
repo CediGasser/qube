@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Modal from '$lib/components/Modal.svelte';
 	import { page } from '$app/stores';
 	import { rcon } from '$lib/Rcon';
 	import type { PageData } from './$types';
@@ -9,38 +8,35 @@
 	export let data: PageData;
 
 	let opened = false;
-	let serverURL: string;
-	let password: string;
+	let serverURL: string = '';
+	let password: string = '';
 
 	async function setupConnection(): Promise<void> {
-		console.log(serverURL)
-		console.log(password)
-		console.log(data.rcon_proxy_server)
+		console.log(serverURL);
+		console.log(password);
+		console.log(data.rcon_proxy_server);
 		rcon.connect(serverURL, password, data.rcon_proxy_server);
 	}
 </script>
 
 <header>
-	<select>
-		<option>
-			<a href="/" class:active={$page.url.pathname === '/'}>
-				QR Code Builder
-			</a>
-		</option>
-		<option>
-			<a href="/terminal" class:active={$page.url.pathname === '/terminal'}>
-				Terminal
-			</a>
-		</option>
-		<option>
-			<a href="/image" class:active={$page.url.pathname === '/image'}>
-				Image
-			</a>
-		</option>
-	</select>
-	<button on:click={() => (opened = true)}>
-		Connect
-	</button>
+	<ul>
+		<li>
+			<a href="/" class:active={$page.url.pathname === '/'}> QR Code Builder </a>
+		</li>
+		<li>
+			<a href="/terminal" class:active={$page.url.pathname === '/terminal'}> Terminal </a>
+		</li>
+		<li>
+			<a href="/image" class:active={$page.url.pathname === '/image'}> Image </a>
+		</li>
+	</ul>
+
+	<div class="connection">
+		<input type="text" bind:value={serverURL} placeholder="Server URL" />
+		<input type="password" bind:value={password} placeholder="Password" />
+		<button on:click={setupConnection}> Connect </button>
+	</div>
 </header>
 
 <main>
@@ -48,8 +44,24 @@
 </main>
 
 <style>
+	ul {
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+	}
+
 	main {
 		margin: 16px;
+	}
+
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: rgb(255, 255, 255);
+		box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+		padding: 8px 16px;
 	}
 
 	header a {
@@ -69,7 +81,7 @@
 		background-color: rgb(242, 242, 255);
 	}
 	header a:active {
-		color: inherit; 
+		color: inherit;
 	}
 	.active {
 		background-color: rgb(230, 230, 255);

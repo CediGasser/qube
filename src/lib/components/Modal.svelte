@@ -1,19 +1,28 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
     
-    export let opened: boolean = false;
-
-    let dialog: HTMLDialogElement;
-
-    $: if (dialog && !(dialog.open) && opened) {
-        console.log('open modal')
-        dialog.showModal();
-    } else if (dialog && dialog.open && !opened) {
-        console.log('close modal')
-        dialog.close();
+    interface Props {
+        opened?: boolean;
+        children?: import('svelte').Snippet;
     }
+
+    let { opened = false, children }: Props = $props();
+
+    let dialog: HTMLDialogElement = $state();
+
+    run(() => {
+        if (dialog && !(dialog.open) && opened) {
+            console.log('open modal')
+            dialog.showModal();
+        } else if (dialog && dialog.open && !opened) {
+            console.log('close modal')
+            dialog.close();
+        }
+    });
 
     const dispatchClickoutside = () => {
         dispatch('clickoutside');
@@ -42,5 +51,5 @@
 </script>
 
 <dialog use:clickOutside={{ enabled: !!(dialog?.open), callback: dispatchClickoutside }} bind:this={dialog}>
-    <slot />
+    {@render children?.()}
 </dialog>

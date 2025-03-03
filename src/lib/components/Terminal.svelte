@@ -3,10 +3,14 @@
 	import { createEventDispatcher } from 'svelte';
 	import { scrollIntoView } from '$lib/Actions';
 
-	export let enabled = false;
-	export let lines: string[] = [];
+	interface Props {
+		enabled?: boolean;
+		lines?: string[];
+	}
 
-	let current_line = '';
+	let { enabled = false, lines = [] }: Props = $props();
+
+	let current_line = $state('');
 
 	const dispatch = createEventDispatcher();
 

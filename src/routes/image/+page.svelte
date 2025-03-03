@@ -1,14 +1,15 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import { QRCode } from '$lib/QRCode'
     import { BlockRepresentation } from '$lib/BlockRepresentation'
     import { rcon } from '$lib/Rcon'
     import ImageUploadInput from '$lib/components/ImageUploadInput.svelte'
 
-    let dataUrl: string
+    let dataUrl: string = $state()
     let text: string
     let baseCoordinates = { x: -200, y: 80, z: -372 }
 
-    $: updateImage(text)
 
     async function updateImage(newText: string) {
         dataUrl = await QRCode.getDataUrl(newText || ' ') ?? ''
@@ -32,6 +33,9 @@
         const command = `fill ${x} ${y} ${z} ${x + blockRepresentation.width} ${y + blockRepresentation.height} ${z} minecraft:air`
         rcon.send(command)
     }
+    run(() => {
+        updateImage(text)
+    });
 </script>
 
 <h1>QR Code Builder</h1>
@@ -40,8 +44,8 @@
 </div>
 
 <img src={dataUrl} alt="Your upload"/>
-<button on:click={buildImage}>Build</button>
-<button on:click={clearBlocks}>Clear</button>
+<button onclick={buildImage}>Build</button>
+<button onclick={clearBlocks}>Clear</button>
 
 <style>
     img {

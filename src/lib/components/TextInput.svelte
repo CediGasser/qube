@@ -1,13 +1,20 @@
 <script lang="ts">
-    export let label: string;
-    export let value: string;
-	export let placeholder: string = '';
+    import { createBubbler } from 'svelte/legacy';
+
+    const bubble = createBubbler();
+    interface Props {
+        label: string;
+        value: string;
+        placeholder?: string;
+    }
+
+    let { label, value = $bindable(), placeholder = '' }: Props = $props();
 </script>
 
 {#if label}
     <label for="input">{label}</label>
 {/if}
-<input placeholder={placeholder} bind:value id="input" type="text" on:keyup on:keydown on:keypress/>
+<input placeholder={placeholder} bind:value id="input" type="text" onkeyup={bubble('keyup')} onkeydown={bubble('keydown')} onkeypress={bubble('keypress')}/>
 
 <style>
     label {
